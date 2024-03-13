@@ -13,6 +13,11 @@ public class ExampleController {
 
     @GetMapping("/about")
     public String getAbout() {
-        return "This is about endpoint with permit all policy";
+        return "This is about endpoint";
+    }
+
+    @GetMapping("/admin")
+    public String getAdmin() {
+        return "This is admin endpoint";
     }
 }

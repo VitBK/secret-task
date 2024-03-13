@@ -1,6 +1,5 @@
 package io.practice.securitytask;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,8 +21,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/about").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/about").hasAuthority("VIEW_INFO")
+                        .requestMatchers("/admin").hasAuthority("VIEW_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -32,8 +32,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) ->
-                                httpServletResponse.setStatus(HttpServletResponse.SC_OK))
+                        .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true));
